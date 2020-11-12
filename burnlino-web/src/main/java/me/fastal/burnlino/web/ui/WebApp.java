@@ -17,21 +17,21 @@ public final class WebApp {
 
     @GetMapping ("/echo/{value}")
     public String echoValue (@PathVariable int value, Model model) {
-        model.addAttribute ("value", hex.echoValue (value));
+        model.addAttribute ("value", String.format("%.2f", (float) hex.echoValue(value)));
         return "echo";
     }
 
     @GetMapping ("/tax_rate/{state}")
     public String taxRate (@PathVariable String state, Model model) {
         model.addAttribute ("state", state);
-        model.addAttribute ("value", hex.getTaxRateForState (state));
+        model.addAttribute ("value", String.format("%.2f", (float) hex.getTaxRateForState (state)));
         return "tax-rate";
     }
 
     @GetMapping ("/price_with_tax_rate/{price}/{state}")
     public String price (@PathVariable int price, @PathVariable String state, Model model) {
         model.addAttribute ("state", state);
-        model.addAttribute ("value", hex.calculatePriceWithTaxRate (price, state));
+        model.addAttribute ("value", String.format("%.2f", (float) hex.calculatePriceWithTaxRate (price, state)));
         return "price";
     }
 
