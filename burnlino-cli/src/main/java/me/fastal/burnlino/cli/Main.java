@@ -9,7 +9,7 @@ public class Main {
         PriceMaker hex = new PriceMaker(new InMemoryTaxRateStore ());
 
         CliApp ui = new CliApp(hex);
-        ui.iniciar(args);
+        ui.run (args);
     }
 
 }

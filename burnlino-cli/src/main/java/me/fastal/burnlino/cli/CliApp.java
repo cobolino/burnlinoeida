@@ -6,61 +6,57 @@ import java.io.PrintStream;
 
 public class CliApp {
 
-    private static PrintStream stream = System.out;
-    private ForCalculatingPrices hex;
-    private String[] args;
-    private int donde = 0;
+    private final ForCalculatingPrices hex;
+    private PrintStream stream = System.out;
+    private String[] arguments;
+    private int argumentPosition = 0;
 
     public CliApp (ForCalculatingPrices hex) {
         this.hex = hex;
     }
 
-    public void iniciar (String... args) {
-        this.args = args;
-        parsear ();
+    public void run (String... args) {
+        this.arguments = args;
+        parse ();
     }
 
-    private void decir (String str) {
+    private void say (String str) {
         stream.println (str);
     }
 
     public void setOut (PrintStream out) {
-        stream = out;
+        this.stream = out;
     }
 
-    private void parsear () {
-        String reporte = "";
+    private void parse () {
 
-        while (hayMas ()) {
-            if (donde == 0) {
-                String functionName = args[donde];
+        String message = "";
+
+        while (hasMore ()) {
+            if (argumentPosition == 0) {
+                String functionName = arguments[argumentPosition];
 
                 if (functionName.equals ("echoValue")) {
-                    int precio = Integer.parseInt (args[++donde]);
-                    reporte = String.format ("El precio es %.2f dólares", (float) hex.echoValue (precio));
+                    int price = Integer.parseInt (arguments[++argumentPosition]);
+                    message = String.format ("El precio es %.2f dólares", (float) hex.echoValue (price));
                 } else if (functionName.equals ("getTaxRateForState")) {
-                    String state = args[++donde];
-                    reporte = String.format ("La tasa de impuesto es %.2f por ciento.", hex.getTaxRateForState (state));
+                    String state = arguments[++argumentPosition];
+                    message = String.format ("La tasa de impuesto es %.2f por ciento.", hex.getTaxRateForState (state));
                 } else if (functionName.equals ("calculatePriceWithTaxRate")) {
-                    int precio = Integer.parseInt (args[++donde]);
-                    String state = args[++donde];
-                    reporte =
+                    int price = Integer.parseInt (arguments[++argumentPosition]);
+                    String state = arguments[++argumentPosition];
+                    message =
                             String.format ("El precio con la tasa de impuesto es %.2f dólares",
-                                    hex.calculatePriceWithTaxRate (precio, state));
+                                    hex.calculatePriceWithTaxRate (price, state));
                 }
             }
-
-            donde++;
+            argumentPosition++;
         }
-
-        decir (reporte);
+        say (message);
     }
 
-    private boolean hayMas () {
-        if (args.length <= donde || donde >= args.length)
-            return false;
-
-        return true;
+    private boolean hasMore () {
+        return arguments.length > argumentPosition;
     }
 
 
